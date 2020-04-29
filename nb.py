@@ -9,24 +9,60 @@ y_train = train[:, 4]
 X_test = test[:, 0:4]
 y_test = test[:, 4]
 
+
 def prob_of_class(y_train):
     unique, counts = np.unique(y_train, return_counts=True)
     prob = counts / np.sum(counts)
-    return dict(zip(unique, prob))
+    return (dict(zip(unique, prob)), dict(zip(unique, counts)))
 
 
 def prob_of_args(X_train, X_test, y_train, y_test):
-    prob = prob_of_class(y_train)
+    import random
 
-    for row in np.arange(X_test.shape[0]):
-        for col in np.arange(X_train.shape[1]):
-            for decision in prob:
-                ind = y_train == decision
-                df = X_train[ind, col] == X_test[row, col]
-                print(np.sum(df) / np.sum(ind))
+    prob, n = prob_of_class(y_train)
 
-# czy nie poprzestawiać elementów w pętlach? Jak zaimplementować wyjątki, gdzie w jednej z klas jest zero? -> słownik
+    rows = np.arange(X_test.shape[0])
+    cols = np.arange(X_train.shape[1])
 
-prob_of_args(X_train, X_test, y_train, y_test)
+    wynik_final = []
+
+    for row in rows:
+        wynik = []
+        for decision in prob:
+            wynik_czesciowy = []
+            index = y_train == decision
+            for col in cols:
+                df = X_train[index, col] == X_test[row, col]
+                wynik_czesciowy.append(np.sum(df))
+            wynik.append(wynik_czesciowy)
+
+        wynik = np.array(wynik)
+        for j in cols:
+            if np.any(wynik[:, j]) == 0:
+                wynik[wynik[:, j] != 0, j] += 1
+
+        tmp = {}
+        i = 0
+        for c in prob:
+            tmp[c] = ((np.sum(wynik[i, :]) / n[c]) * prob[c])
+            i += 1
+
+        if np.all(list(tmp.values()) == list(tmp.values())[0]):
+            x = random.sample(list(tmp.keys()), 1)
+            wynik_final.append(x[0])
+        else:
+            x = max(tmp, key=tmp.get)
+            wynik_final.append(x)
+
+    return wynik_final
+
+
+y_pred = prob_of_args(X_train, X_test, y_train, y_test)
+print(y_pred)
+
+#Evaluating the Algorithm
+from sklearn.metrics import classification_report, confusion_matrix
+print(confusion_matrix(y_test, y_pred))
+print(classification_report(y_test, y_pred))
 
 
