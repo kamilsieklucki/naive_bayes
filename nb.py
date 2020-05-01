@@ -1,13 +1,13 @@
 import numpy as np
 import pandas as pd
 
-# test = np.column_stack([[2, 1, 9, 4], [4, 2, 7, 4], [2, 1, 10, 10], [1, 1, 7, 10], [4, 2, 4, 2]])
-# train = np.column_stack([[1, 10, 2, 10, 3, 2], [3, 3, 3, 9, 5, 3], [1, 2, 1, 7, 2, 1], [1, 1, 1, 1, 2, 1], [2, 2, 2, 4, 4, 4]])
-#
-# X_train = train[:, 0:4]
-# y_train = train[:, 4]
-# X_test = test[:, 0:4]
-# y_test = test[:, 4]
+test = np.column_stack([[2, 1, 9, 4], [4, 2, 7, 4], [2, 1, 10, 10], [1, 1, 7, 10], [4, 2, 4, 2]])
+train = np.column_stack([[1, 10, 2, 10, 3, 2], [3, 3, 3, 9, 5, 3], [1, 2, 1, 7, 2, 1], [1, 1, 1, 1, 2, 1], [2, 2, 2, 4, 4, 4]])
+
+X_train = train[:, 0:4]
+y_train = train[:, 4]
+X_test = test[:, 0:4]
+y_test = test[:, 4]
 
 # test iris
 #Importing the Dataset
@@ -21,17 +21,17 @@ import pandas as pd
 # from sklearn.model_selection import train_test_split
 # X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.5)
 
-url = "https://archive.ics.uci.edu/ml/machine-learning-databases/wine/wine.data"
-names = ['target_names','Alcohol', 'Malic acid', 'Ash', 'Alcalinity of ash', 'Magnesium', 'Total phenols', 'Flavanoids',
-  'Nonflavanoid phenols', 'Proanthocyanins', 'Color intensity', 'Hue', 'OD280-OD315 of diluted wines','Proline']
-dataset_wine = pd.read_csv(url, names=names)
-
-X = dataset_wine.iloc[:, :-1].values
-y = dataset_wine.iloc[:, 0].values
-
-from sklearn.model_selection import train_test_split
-
-X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.25)
+# url = "https://archive.ics.uci.edu/ml/machine-learning-databases/wine/wine.data"
+# names = ['target_names','Alcohol', 'Malic acid', 'Ash', 'Alcalinity of ash', 'Magnesium', 'Total phenols', 'Flavanoids',
+#   'Nonflavanoid phenols', 'Proanthocyanins', 'Color intensity', 'Hue', 'OD280-OD315 of diluted wines','Proline']
+# dataset_wine = pd.read_csv(url, names=names)
+#
+# X = dataset_wine.iloc[:, :-1].values
+# y = dataset_wine.iloc[:, 0].values
+#
+# from sklearn.model_selection import train_test_split
+#
+# X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.25)
 
 
 def prob_of_class(y_train):
@@ -82,8 +82,8 @@ def prob_of_args(X_train, X_test, y_train, y_test):
 
 
 y_pred = prob_of_args(X_train, X_test, y_train, y_test)
-print(y_pred)
-print(y_test)
+# print(y_pred)
+# print(y_test)
 
 #Evaluating the Algorithm
 from sklearn.metrics import classification_report, confusion_matrix
