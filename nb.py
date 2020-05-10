@@ -85,7 +85,55 @@ y_pred = prob_of_args(X_train, X_test, y_train, y_test)
 # print(y_pred)
 # print(y_test)
 
+def cm(y_pred, y_test):
+    unique = np.unique(y_test)
+    wynik = np.zeros((len(unique), len(unique)))
+    classes = len(unique)
+    length = len(y_test)
+
+    for i in range(len(unique)):
+        for j in range(len(unique)):
+            wynik[j, i] = np.sum((y_pred == unique[i]) & (y_test == unique[j]))
+
+    print(wynik)
+
+    acc = []
+    acc_il = []
+    for k in range(classes):
+        licznik = wynik[k, k]
+        mianownik = np.sum(wynik[:, k])
+        y = 0 if mianownik == 0 else licznik / mianownik
+
+        print("acc" + str(unique[k]), round(y, 2))
+
+        acc.append(y)
+        acc_il.append(wynik[k, k])
+
+    print("acc_global", round(sum(acc_il) / length, 2))
+    print("acc_balanced", round(sum(acc) / classes, 2))
+
+    tpr = []
+    for k in range(classes):
+        licznik = wynik[k, k]
+        mianownik = np.sum(wynik[k, :])
+        y = 0 if mianownik == 0 else licznik / mianownik
+
+        print("tpr" + str(unique[k]), round(y, 2))
+
+        tpr.append(y)
+
+    print("coverage", np.sum(wynik) / length)
+
+
+
+
+# confusion matrix
+print("Confusion Matrix (my implementation)")
+cm(y_pred, y_test)
+
+
 #Evaluating the Algorithm
+print("Evaluating the Algorithm sklearn")
 from sklearn.metrics import classification_report, confusion_matrix
 print(confusion_matrix(y_test, y_pred))
 print(classification_report(y_test, y_pred))
